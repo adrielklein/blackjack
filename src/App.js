@@ -1,5 +1,6 @@
 import React, { useState, Fragment } from "react";
 import "./App.css";
+import { Button, ButtonGroup, CircularProgress } from "@material-ui/core";
 
 const cardToValue = {
   "2": 2,
@@ -78,39 +79,67 @@ const App = () => {
     setPlayerCards(newPlayerCards);
     const newPlayerCardsTotal = getTotal({ cards: newPlayerCards });
     if (newPlayerCardsTotal > 21) {
-      setGameResult("You lost");
+      setGameResult("You lost 😩️");
     }
     setPlayerCardsTotal(newPlayerCardsTotal);
   };
 
   const stand = () => {
-    setGameResult(playerCardsTotal > houseCardsTotal ? "You won" : "You lost");
+    setGameResult(playerCardsTotal > houseCardsTotal ? "You won 😄" : "You lost 😩️");
   };
+
   return (
     <div style={{ margin: "15px", textAlign: "center" }}>
       <h1>Blackjack</h1>
-      {isLoading ? (
-        "Loading..."
-      ) : (
-        <Fragment>
-          <button onClick={resetGame}>
-            {deckId ? "Reset Game" : "Play Game"}
-          </button>
-          <h2>House ({houseCardsTotal})</h2>
-          <Cards cards={houseCards} />
-          <h2>You ({playerCardsTotal})</h2>
-          <Cards cards={playerCards} />
-          {gameResult ? (
-            <h1>{gameResult}</h1>
-          ) : (
-            <div>
-              <button onClick={hit}>Hit</button>
-              <button onClick={stand}>Stand</button>
-            </div>
-          )}
-        </Fragment>
+      {isLoading && <CircularProgress style={{ marginTop: "50px" }} />}
+      {!isLoading && (
+        <Button variant="contained" color="primary" onClick={resetGame}>
+          {deckId ? "Reset Game" : "Play Game"}
+        </Button>
+      )}
+      {!isLoading && deckId && (
+        <Board
+          resetGame={resetGame}
+          deckId={deckId}
+          houseCardsTotal={houseCardsTotal}
+          houseCards={houseCards}
+          playerCardsTotal={playerCardsTotal}
+          playerCards={playerCards}
+          gameResult={gameResult}
+          hit={hit}
+          stand={stand}
+        />
       )}
     </div>
+  );
+};
+
+const Board = ({
+  houseCardsTotal,
+  houseCards,
+  playerCardsTotal,
+  playerCards,
+  gameResult,
+  hit,
+  stand
+}) => {
+  return (
+    <Fragment>
+      <h2>House ({houseCardsTotal})</h2>
+      <Cards cards={houseCards} />
+      <h2>You ({playerCardsTotal})</h2>
+      <Cards cards={playerCards} />
+      {gameResult ? (
+        <h1>{gameResult}</h1>
+      ) : (
+        <div>
+          <ButtonGroup color="primary" variant="contained" size="large">
+            <Button onClick={hit}>Hit</Button>
+            <Button onClick={stand}>Stand</Button>
+          </ButtonGroup>
+        </div>
+      )}
+    </Fragment>
   );
 };
 
