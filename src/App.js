@@ -85,7 +85,9 @@ const App = () => {
   };
 
   const stand = () => {
-    setGameResult(playerCardsTotal > houseCardsTotal ? "You won 😄" : "You lost 😩️");
+    setGameResult(
+      playerCardsTotal > houseCardsTotal ? "You won 😄" : "You lost 😩️"
+    );
   };
 
   return (
@@ -132,7 +134,7 @@ const Board = ({
       {gameResult ? (
         <h1>{gameResult}</h1>
       ) : (
-        <div>
+        <div style={{ marginTop: "5px" }}>
           <ButtonGroup color="primary" variant="contained" size="large">
             <Button onClick={hit}>Hit</Button>
             <Button onClick={stand}>Stand</Button>
